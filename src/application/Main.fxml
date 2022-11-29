@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+   <children>
+      <Button fx:id="updateBtn" layoutX="104.0" layoutY="158.0" mnemonicParsing="false" onAction="#goPantry" text="Update Pantry" />
+      <ImageView fx:id="logo" fitHeight="150.0" fitWidth="200.0" layoutX="75.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../phase1/output-onlinepngtools.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="genBtn" layoutX="96.0" layoutY="200.0" mnemonicParsing="false" onAction="#generate" text="Generate Recipes" />
+   </children>
+</AnchorPane>
