@@ -24,69 +24,83 @@ public class LoginController {
 	private TextField unID;
 	@FXML
 	private TextField passID;
-	
-	//login button
+
+	// login button
 	public void Login(ActionEvent event) throws Exception {
-		//variables to hold database user data
+		// variables to hold database user data
 		String username = "";
 		String password = "";
 		String userID = "";
 		String ingID = "";
-		
-		String sql ="SELECT * FROM registration";
+		int admin = 0;
+
+		String sql = "SELECT * FROM registration";
 		try {
 			// Establishing connection
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbconnector", "root",
-			"cs380");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbconnector", "root", "cs380");
 			System.out.println("Connected With the database successfully");
 			Statement statement = con.createStatement();
-	        ResultSet rs = statement.executeQuery(sql);
-	        
-	        //loop through all users data to check if user input matches
-	        while (rs.next()) { 
-	        userID = rs.getString(1);
-	        username = rs.getString(3);
-	        password = rs.getString(4);
-	        ingID = rs.getString(5);
-	        System.out.println(username);
-	        System.out.println(password);
-	        //if matches login success
-	    	if (unID.getText().equals(username) && passID.getText().equals(password)) {
-				sID.setText("Login Success");
-				
-				//for passing user data between scenes
-				User u = new User(userID, ingID); 
-					
-				  Node node = (Node) event.getSource();
-				  Stage stage = (Stage) node.getScene().getWindow();
-				  stage.close();
-				
-				  //load main scene
-				Stage primaryStage = new Stage();
-				Parent root = 
-					FXMLLoader.load(getClass().getResource("/application/Main.fxml"));
-				
-				Scene scene = new Scene(root, 400, 400);
-					scene.getStylesheets().add(getClass().getResource("application.css")
-						.toExternalForm());
-					primaryStage.setUserData(u);
-					primaryStage.setScene(scene);
-					primaryStage.show();
-					
-			
-					
+			ResultSet rs = statement.executeQuery(sql);
+
+			// loop through all users data to check if user input matches
+			while (rs.next()) {
+				userID = rs.getString(1);
+				username = rs.getString(3);
+				password = rs.getString(4);
+				ingID = rs.getString(5);
+				admin = rs.getInt(6);
+				// System.out.println(username);
+				// System.out.println(password);
+				// if matches login success
+				if (unID.getText().equals(username) && passID.getText().equals(password)) {
+					sID.setText("Login Success");
+
+					// for passing user data between scenes
+					User u = new User(userID, ingID, admin);
+
+					Node node = (Node) event.getSource();
+					Stage stage = (Stage) node.getScene().getWindow();
+					stage.close();
+
+					// check if user is an admin
+
+					if (admin == 1) {
+						Stage adminStage = new Stage();
+						Parent root = FXMLLoader.load(getClass().getResource("/application/MainAdmin.fxml"));
+
+						Scene scene = new Scene(root, 400, 400);
+						scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+						adminStage.setUserData(u);
+						adminStage.setScene(scene);
+
+						adminStage.show();
+
+					}
+
+					else {
+						// load main scene
+						Stage primaryStage = new Stage();
+						Parent root = FXMLLoader.load(getClass().getResource("/application/Main.fxml"));
+
+						Scene scene = new Scene(root, 400, 400);
+						scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+						primaryStage.setUserData(u);
+						primaryStage.setScene(scene);
+
+						primaryStage.show();
+					}
+
 					break;
-			//fail if not match
-			} else {
-				sID.setText("Login Failed");
+					// fail if not match
+				} else {
+					sID.setText("Login Failed");
+				}
+
 			}
-	    	
-	        }
-	       	    
-			} catch (SQLException e) {
+
+		} catch (SQLException e) {
 			System.out.println("Error while connecting to the database");
-			}	
-		
+		}
 
 	}
 }
